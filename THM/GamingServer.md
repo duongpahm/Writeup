@@ -1,4 +1,4 @@
-![](GamingServer/Screenshot 2026-01-28 at 08.58.12.png)
+![](GamingServer/Screenshot_2026-01-28_at_08.58.12.png)
 ## Recon
 Như thường lệ, chúng ta bắt đầu bằng việc quét nmap để liệt kê thông tin.
 ```bash
@@ -23,20 +23,20 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 12.68 seconds
 ```
 Ta thấy cổng 22 đang mở trên SSH, cổng 80 cũng mở cho http, như vậy bây giờ chúng ta sẽ kiểm tra chúng. Chúng ta thấy rằng đây là một page của một nhà sản game
-![](GamingServer/Screenshot 2026-01-28 at 09.04.17.png)
+![](GamingServer/Screenshot_2026-01-28_at_09.04.17.png)
 Chúng ta thấy một thông báo dành cho người dùng tên là **john** ở cuối phần mã nguồn của trang `index.html`. Cái tên này có thể sẽ hữu ích về sau, nếu chúng ta thử đăng nhập vào đâu đó.
-![](GamingServer/Screenshot 2026-01-28 at 09.17.32.png)
+![](GamingServer/Screenshot_2026-01-28_at_09.17.32.png)
 Sau khi thực hiện fuzzing ở port 80, ta tìm thấy một số endpoint như `/robots.txt`, `/secret`, `/uploads`
-![](GamingServer/Screenshot 2026-01-28 at 09.00.25.png)
+![](GamingServer/Screenshot_2026-01-28_at_09.00.25.png)
 ### Secret
 Truy cập vào endpoint `/secret` ta thu được secretKey
-![](GamingServer/Screenshot 2026-01-28 at 09.05.18.png)
+![](GamingServer/Screenshot_2026-01-28_at_09.05.18.png)
 ### Uploads
 Chúng ta nhận được 3 file.  
 - `dict.lst` là một danh sách các mật khẩu phổ biến, tương tự như - file `fasttrack.txt` trong Kali.  
 - `manifesto.txt` thì chỉ đơn giản là một bản tuyên ngôn.  
 - File `meme.jpg` yêu cầu một passphrase khi dùng steghide.
-![](GamingServer/Screenshot 2026-01-28 at 09.11.03.png)
+![](GamingServer/Screenshot_2026-01-28_at_09.11.03.png)
 Hãy crack nó bằng wordlist mà họ đã cung cấp.  
 Lệnh sau sẽ chuyển đổi private key sang định dạng mà John có thể sử dụng để crack.
 ```bash
@@ -58,9 +58,9 @@ Use the "--show" option to display all of the cracked passwords reliably
 Session completed. 
 ```
 Sau khi tìm được password ta thực hiện ssh vào bằng lệnh `ssh -i id_rsa john@ip`
-![](GamingServer/Screenshot 2026-01-28 at 09.36.11.png)
+![](GamingServer/Screenshot_2026-01-28_at_09.36.11.png)
 Như vậy ta thu được flag của user.txt
-![](GamingServer/Screenshot 2026-01-28 at 09.37.02.png)
+![](GamingServer/Screenshot_2026-01-28_at_09.37.02.png)
 ### Root
 Kiểm tra credencial của user hiện tại, ta sử dụng lệnh `id`. Có thể thấy user hiện tại đang thuộc nhóm `lxd (gid 108)`, có thể lợi dụng để thực hiện kỹ thuật theo thang đang quyền vì LXD chạy với quyền root, ta có thể tạo một
 ```bash
@@ -101,5 +101,5 @@ Truy cập vào container và lấy quyền Root:
 ```bash
 lxc exec ignite /bin/sh
 ```
-![](GamingServer/Screenshot 2026-01-28 at 10.13.25.png)
-![](GamingServer/Screenshot 2026-01-28 at 10.13.57.png)
+![](GamingServer/Screenshot_2026-01-28_at_10.13.25.png)
+![](GamingServer/Screenshot_2026-01-28_at_10.13.57.png)
