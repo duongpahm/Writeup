@@ -14,8 +14,6 @@ coverY: 0
 * [DevHub](HTB/DevHub.md)
 * [Delivery](HTB/Delivery.md)
 * [Snapped](HTB/Snapped.md)
-* [Soccer](HTB/Soccer.md)
-* [Union](HTB/Union.md)
 
 ## TryHackMe
 
