@@ -1,12 +1,3 @@
----
-description: Bộ sưu tập writeup CTF và nghiên cứu lỗ hổng của duongpahm
-coverY: 0
----
-
-# Writeup
-
-Đây là tuyển tập các bài writeup khai thác máy ảo trên **HackTheBox**, **TryHackMe**, cùng các bài phân tích lỗ hổng (CVE) và ghi chú kỹ thuật.
-
 ## HackTheBox
 
 * [Reactor](HTB/Reactor.md)
