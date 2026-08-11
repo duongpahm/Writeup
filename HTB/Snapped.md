@@ -199,7 +199,7 @@ by Ben "epi" Risher 🤓                 ver: 2.13.1
 
 **Kết quả:** Quét Feroxbuster cho thấy một số file tài sản (assets) và một đường dẫn `/mcp` bị trả về mã lỗi 403 (Forbidden).
 
-<figure><img src=".gitbook/assets/Screenshot 2026-06-04 at 16.47.43.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="Snapped/Screenshot 2026-06-04 at 16.47.43.png" alt=""><figcaption></figcaption></figure>
 
 Kết qủa cho thấy web có thêm 1 endpoint đang chú ý là `/api`
 

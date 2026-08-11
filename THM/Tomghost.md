@@ -1,5 +1,5 @@
 
-![[Screenshot 2026-01-28 at 10.27.46.png]]
+![](Tomghost/Screenshot 2026-01-28 at 10.27.46.png)
 
 ## Recon 
 Như các lab khác, đầu tiên chúng ta sử dụng nmap để thực hiện scan ip
@@ -36,16 +36,16 @@ git clone https://github.com/00theway/Ghostcat-CNVD-2020-10487.git
 cd Ghostcat-CNVD-2020-10487
 ```
 
-Sau khi clone công cụ khai thác trên Github, ta thực hiện đọc file (`read`) và thực thi mã (`eval`). Với mục tiêu `10.49.157.12` của bạn, cấu trúc lệnh sẽ như sau:![[Screenshot 2026-01-28 at 11.12.22.png]]
+Sau khi clone công cụ khai thác trên Github, ta thực hiện đọc file (`read`) và thực thi mã (`eval`). Với mục tiêu `10.49.157.12` của bạn, cấu trúc lệnh sẽ như sau:![](Tomghost/Screenshot 2026-01-28 at 11.12.22.png)
 Kết quả cho thấy khai thác thành công lỗ hổng **Ghostcat** và trích xuất được thông tin cực kỳ giá trị từ file `web.xml`. Ta thu được username:password trong phần kết quả: `skyfuck:8730281lkjlkjdqlksalks`. 
 Bây giờ chúng ta thực hiện thử truy cập thông qua ssh bằng câu lệnh dưới đây:
 ```bash
 ssh skyfuck@10.49.157.12
 ```
-![[Screenshot 2026-01-28 at 11.18.26.png]]
-![[Screenshot 2026-01-28 at 11.19.47.png]]
+![](Tomghost/Screenshot 2026-01-28 at 11.18.26.png)
+![](Tomghost/Screenshot 2026-01-28 at 11.19.47.png)
 Kiểm tra các file khoá bí mật PGP, hầu hết các khóa bí mật PGP đều được bảo vệ bằng một mật khẩu. Bạn không thể sử dụng nó nếu không có mật khẩu này. Bạn có thể dùng công cụ **John the Ripper** để bẻ khóa, ta lưu file ra máy của mình sau đó bẻ khoá bằng wordlist:
-![[Screenshot 2026-01-28 at 11.27.24.png]]
+![](Tomghost/Screenshot 2026-01-28 at 11.27.24.png)
 Bây giờ bạn đã có đầy đủ mọi thứ để lấy được thông tin đăng nhập của user tiếp theo. Hãy quay lại cửa sổ SSH của user **skyfuck** trên máy mục tiêu và thực hiện các bước cuối cùng này:
 1. Nhập khóa (Import) vào keyring
 Đầu tiên, bạn cần đưa cái chìa khóa `tryhackme.asc` vào hệ thống quản lý khóa của GPG:
@@ -59,14 +59,14 @@ gpg --decrypt credential.pgp
 ```
  3. Nhập Passphrase
 Khi hệ thống hiện bảng hỏi mật khẩu (hoặc yêu cầu nhập ở terminal), hãy nhập: **`alexandru`**
-![[Screenshot 2026-01-28 at 11.32.25.png]]
+![](Tomghost/Screenshot 2026-01-28 at 11.32.25.png)
 Ta đã giải mã thành công nội dung của tệp `credential.pgp`.
 Thông tin đăng nhập mới của chúng ta là:
 - **Username:** `merlin`
 - **Password:** `asuyusdoiuqoilkda312j31k2j123j1g23g12k3g12kj3gk12jg3k12j3kj123j`
-Bây giờ bạn đang ở user `skyfuck`, hãy thực hiện chuyển đổi sang user `merlin`![[Screenshot 2026-01-28 at 11.34.55.png]]
+Bây giờ bạn đang ở user `skyfuck`, hãy thực hiện chuyển đổi sang user `merlin`![](Tomghost/Screenshot 2026-01-28 at 11.34.55.png)
 Đầu tiên, ta di chuyển về thư mục gốc, rồi kiểm tra ta thu được flag user đầu tiên
-![[Screenshot 2026-01-28 at 11.40.31.png]]
+![](Tomghost/Screenshot 2026-01-28 at 11.40.31.png)
 Thực hiện kiểm tra quyền hạn của user merlin bằng 
 ```bash
 merlin@ubuntu:~$ sudo -l
@@ -80,4 +80,4 @@ uid=1000(merlin) gid=1000(merlin) groups=1000(merlin),4(adm),24(cdrom),30(dip),4
 ```
 Kết quả cho thấy ta vừa tìm thấy con đường "tà đạo" nhanh nhất để lên ngôi vị cao nhất của hệ thống này. Việc `/usr/bin/zip` được phép chạy dưới quyền **root** mà không cần mật khẩu (`NOPASSWD`) là một lỗi cấu hình kinh điển trong thế giới Linux Privilege Escalation.
 Vì  có quyền `sudo zip`, ta có thể nén bất kỳ file nào trên hệ thống (kể cả file của Root) vào một file tạm, sau đó xem nội dung của nó, đầu tiên nén file flag của Root vào thư mục `/tmp`, sau đó dùng `unzip` với tham số `-p` (pipe) để đọc nội dung file mà không cần giải nén ra đĩa
-![[Screenshot 2026-01-28 at 11.50.38.png]]
+![](Tomghost/Screenshot 2026-01-28 at 11.50.38.png)

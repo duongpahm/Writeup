@@ -1,4 +1,4 @@
-![[Screenshot 2026-01-27 at 16.10.55.png]]
+![](Cyborg/Screenshot 2026-01-27 at 16.10.55.png)
 
 ## Recon 
 Như thường lệ, chúng ta bắt đầu bằng việc quét nmap để liệt kê thông tin.
@@ -24,16 +24,16 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 13.02 seconds
 ```
 Ta thấy cổng 22 đang mở trên SSH, cổng 80 cũng mở cho http, như vậy bây giờ chúng ta sẽ kiểm tra chúng.
-![[Screenshot 2026-01-27 at 16.19.44.png]]
+![](Cyborg/Screenshot 2026-01-27 at 16.19.44.png)
 Chúng ta thấy rằng đó là trang "Apache 2 Ubuntu Default Page" mặc định của Apache. Bây giờ, chúng ta sử dụng các công cụ kiểm thử để thực hiện fuzzing.
-![[Screenshot 2026-01-27 at 16.22.52.png]]
+![](Cyborg/Screenshot 2026-01-27 at 16.22.52.png)
 Chúng ta có thể thấy rằng nó đã tiết lộ thông tin endpoint `/admin`, hãy thực hiện kiểm tra:
-![[Screenshot 2026-01-27 at 16.24.14.png]]
+![](Cyborg/Screenshot 2026-01-27 at 16.24.14.png)
 Chúng ta thấy rằng đây là một page của một nhà sản xuất âm nhạc, chúng ta xem xét xung quanh và tìm thấy nút tải xuống trong kho lưu trữ. Điều này cho phép chúng ta tải tệp `archive.tar`. Chúng ta sẽ lưu tệp này lại để dùng sau.
 Chuyển đến chúng ta thấy có một hộp chat nơi mọi người có thể nhắn tin cho nhau. Họ nói về một kho lưu trữ âm nhạc nhưng phần quan trọng nhất là phần về proxy Squid.
-![[Screenshot 2026-01-27 at 16.27.48.png]]Squid về cơ bản chỉ là một proxy cho HTTP nhưng chúng ta không cần tìm hiểu quá nhiều về điều này. Họ nói rằng có một số tệp cấu hình nằm rải rác ở đó. Vì vậy, hãy tìm kiếm trên Google để tìm ra vị trí của chúng.
-Chúng ta tìm thấy chúng nằm trong `/etc/squid/squid.conf`, sử dụng các công cụ fuzzing cũng tìm thấy thư mục`/etc`.![[Screenshot 2026-01-27 at 16.33.38.png]]
-![[Screenshot 2026-01-27 at 16.33.50.png]]
+![](Cyborg/Screenshot 2026-01-27 at 16.27.48.png)Squid về cơ bản chỉ là một proxy cho HTTP nhưng chúng ta không cần tìm hiểu quá nhiều về điều này. Họ nói rằng có một số tệp cấu hình nằm rải rác ở đó. Vì vậy, hãy tìm kiếm trên Google để tìm ra vị trí của chúng.
+Chúng ta tìm thấy chúng nằm trong `/etc/squid/squid.conf`, sử dụng các công cụ fuzzing cũng tìm thấy thư mục`/etc`.![](Cyborg/Screenshot 2026-01-27 at 16.33.38.png)
+![](Cyborg/Screenshot 2026-01-27 at 16.33.50.png)
 **squid.conf**
 ```
 auth_param basic program /usr/lib64/squid/basic_ncsa_auth /etc/squid/passwd
@@ -48,7 +48,7 @@ Như ta thấy ở dòng đầu tiên, nó đề cập đến một tập tin pa
 music_archive:$apr1$BpZ.Q.1m$F0qqPwHSOG50URuOVQTTn.
 ```
 Chúng ta thấy đây là một mã băm nên chúng ta tiến hành giải mã nó.
-![[Screenshot 2026-01-27 at 16.36.38.png]]
+![](Cyborg/Screenshot 2026-01-27 at 16.36.38.png)
 hash-identifier cho thấy đó là định dạng MD5(APR), chúng ta chuyển sang các ví dụ của hashcat và tìm thấy chế độ cho điều này (1600). Hashcat giải mã băm:
 ```bash
 ┌──(duongpahm㉿duongpahm)-[~/Desktop]
@@ -166,8 +166,8 @@ Wow I'm awful at remembering Passwords so I've taken my Friends advice and notin
 alex:S3cretP@s3
 ```
 Như vậy, chúng ta đã thu thập được cặp thông tin xác thực hợp lệ. Với các thông tin này, ta có thể tiến hành thiết lập kết nối từ xa tới hệ thống mục tiêu thông qua giao thức **SSH** dưới quyền người dùng **“alex”**
-![[Screenshot 2026-01-27 at 17.03.18.png]]
-![[Screenshot 2026-01-27 at 17.05.13.png]]
+![](Cyborg/Screenshot 2026-01-27 at 17.03.18.png)
+![](Cyborg/Screenshot 2026-01-27 at 17.05.13.png)
 Như vậy chúng ta đã thực hiện lấy được flag của user.
 ### Root
 Để giành quyền truy cập ở mức **root**, tồn tại hai phương thức khai thác. Một trong số đó xuất phát từ một lỗi cấu hình trong quá trình xây dựng hệ thống. Chúng ta thực hiện kiểm tra với lệnh `sudo -l` để liệt kê các quyền sudo mà người dùng hiện tại đang có.
@@ -258,11 +258,11 @@ Vậy chúng ta hãy thử chạy
 ```bash
 sudo /etc/mp3backups/backup.sh -c whoami
 ```
-![[Screenshot 2026-01-27 at 17.15.29.png]]
+![](Cyborg/Screenshot 2026-01-27 at 17.15.29.png)
 Và ta có thể thấy nó đang được chạy với quyền root! Từ đây, ta có thể dễ dàng đọc cờ root nếu muốn. Nhưng chúng ta vẫn chưa xâm nhập được vào hệ thống :( Hãy lấy một shell!
 
 Chúng ta có thể làm điều này bằng cách cấp cho /bin/bash bit SUID.
-![[Screenshot 2026-01-27 at 17.16.43.png]]
+![](Cyborg/Screenshot 2026-01-27 at 17.16.43.png)
 Sau đó, chúng ta có thể chạy lệnh bash -p trong dòng lệnh và sẽ có được quyền truy cập shell với quyền root!!!
 ```bash
 alex@ubuntu:/etc/mp3backups$ bash -p
