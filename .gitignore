@@ -1,1 +1,17 @@
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Obsidian settings & cache
+.obsidian/
+
+# Code and build files
+Code/
+*.c
+*.cpp
+*.h
+*.py
+*.sh
+*.ps1
